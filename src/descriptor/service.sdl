@@ -1,0 +1,550 @@
+{
+  "name" : "PRESTO",
+  "label" : "Presto",
+  "description" : "Distributed SQL Query Engine for Big Data",
+  "version" : "0.98",
+  "runAs" : {
+    "user" : "presto",
+    "group" : "presto"
+  },
+  "parcel" : {
+    "requiredTags" : [ "presto" ]
+  },
+  "inExpressWizard" : false,
+  "icon" : "images/icon.png",
+  "serviceDependencies" : [
+    {
+      "name" : "HIVE",
+      "required" : "false"
+    }
+  ],
+  "commands" : [
+    {
+      "name" : "PrestoInitializeCoordinatorNodePropertiesCommand",
+      "label" : "Initialize node.properties",
+      "description" : "Initialize node.properties file.",
+      "roleName" : "PRESTO_COORDINATOR",
+      "roleCommand" : "coord_init",
+      "runMode" : "all"
+    },
+    {
+      "name" : "PrestoInitializeDiscoveryNodePropertiesCommand",
+      "label" : "Initialize node.properties",
+      "description" : "Initialize node.properties file.",
+      "roleName" : "PRESTO_DISCOVERY",
+      "roleCommand" : "discovery_init",
+      "runMode" : "all"
+    },
+    {
+      "name" : "PrestoInitializeWorkerNodePropertiesCommand",
+      "label" : "Initialize node.properties",
+      "description" : "Initialize node.properties file.",
+      "roleName" : "PRESTO_WORKER",
+      "roleCommand" : "worker_init",
+      "runMode" : "all"
+    }
+  ],
+  "serviceInit" : {
+    "preStartSteps" : [
+      {
+        "commandName" : "PrestoInitializeCoordinatorNodePropertiesCommand"
+      },
+      {
+        "commandName" : "PrestoInitializeDiscoveryNodePropertiesCommand"
+      },
+      {
+        "commandName" : "PrestoInitializeWorkerNodePropertiesCommand"
+      }
+    ]
+  },
+  "parameters" : [
+    {
+      "name" : "discovery_uri",
+      "label" : "discovery uri",
+      "description" : "discovery uri",
+      "configName" : "discovery.uri",
+      "required" : "true",
+      "type" : "uri",
+      "default" : "http://localhost:8080"
+    },
+    {
+      "name" : "hive_metastore_uri",
+      "label" : "hive.metastore.uri",
+      "description" : "hive.metastore.uri",
+      "configName" : "hive.metastore.uri",
+      "required" : "true",
+      "type" : "uri",
+      "default" : "thrift://localhost:9083"
+    },
+    {
+      "name" : "hive_config_resources",
+      "label" : "hive.config.resources",
+      "description" : "hive.config.resources",
+      "configName" : "hive.config.resources",
+      "required" : "true",
+      "type" : "path_array",
+      "pathType" : "serviceSpecific",
+      "default" : ["/etc/hadoop/conf/core-site.xml","/etc/hadoop/conf/hdfs-site.xml"]
+    },
+    {
+      "name" : "mysql_connection_url",
+      "label" : "mysql.connection-url",
+      "description" : "mysql.connection-url",
+      "configName" : "connection-url",
+      "required" : "true",
+      "type" : "uri",
+      "default" : "jdbc:mysql://localhost:3306"
+    },
+    {
+      "name" : "mysql_connection_user",
+      "label" : "mysql.connection-user",
+      "description" : "mysql.connection-user",
+      "configName" : "connection-user",
+      "required" : "true",
+      "type" : "string",
+      "default" : "mysql-user"
+    },
+    {
+      "name" : "mysql_connection_password",
+      "label" : "mysql.connection-password",
+      "description" : "mysql.connection-password",
+      "configName" : "connection-password",
+      "required" : "true",
+      "type" : "password",
+      "default" : "password"
+    },
+    {
+      "name" : "log_level",
+      "label" : "log_level",
+      "description" : "log level",
+      "configName" : "com.facebook.presto",
+      "required" : "true",
+      "type" : "string",
+      "default" : "INFO"
+    }
+  ],
+  "rolesWithExternalLinks" : ["PRESTO_COORDINATOR", "PRESTO_DISCOVERY", "PRESTO_WORKER"],
+  "roles" : [
+    {
+      "name" : "PRESTO_COORDINATOR",
+      "label" : "Coordinator",
+      "pluralLabel" : "Coordinators",
+      "startRunner" : {
+        "program" : "scripts/control.sh",
+        "args" : [
+          "start_corrdinator",
+          "etc/coordinator.config.properties"
+        ],
+        "environmentVariables" : {
+          "PRESTO_JVM_CONFIG" : "${jvm_config}"
+        }
+      },
+      "commands" : [
+        {
+          "name" : "coord_init",
+          "label" : "Initialize node.properties.",
+          "description" : "Initialize node.properties.",
+          "expectedExitCodes" : [0],
+          "requiredRoleState" : "stopped",
+          "commandRunner" : {
+            "program" : "scripts/control.sh",
+            "args" : ["init_node_properties"],
+            "environmentVariables" : {
+            }
+          }
+        }
+      ],
+      "externalLink" : {
+       "name" : "coordinator_web_ui",
+       "label" : "Coordinator Web UI",
+       "url" : "http://${host}:${coordinator_webui_port}"
+      },
+      "topology" : { "minInstances" : 1 },
+      "logging" : {
+         "dir" : "/var/log/presto",
+         "filename" : "presto-coordinator-${host}.log",
+         "configName" : "log.dir",
+         "modifiable" : true,
+         "loggingType" : "log4j"
+      },
+      "parameters" : [
+        {
+          "name" : "coordinator_webui_port",
+          "label" : "Coordinator Port",
+          "description" : "The port of the coordinator",
+          "configName" : "http-server.http.port",
+          "required" : "true",
+          "type" : "port",
+          "default" : 8080
+        },
+        {
+          "name" : "task_max_memory",
+          "label" : "task",
+          "description" : "task.max-memory",
+          "configName" : "task.max-memory",
+          "required" : "true",
+          "type" : "memory",
+          "unit" : "bytes",
+          "default" : 1073741824
+        },
+        {
+          "name" : "jvm_config",
+          "label" : "jvm_config",
+          "description" : "jvm_config",
+          "configName" : "jvm.config",
+          "required" : "true",
+          "type" : "string_array",
+          "separator" : "\n",
+          "default" : [
+            "-server",
+            "-Xmx16G",
+            "-XX:+UseConcMarkSweepGC",
+            "-XX:+ExplicitGCInvokesConcurrent",
+            "-XX:+AggressiveOpts",
+            "-XX:+HeapDumpOnOutOfMemoryError"
+          ]
+        }
+      ],
+      "configWriter" : {
+        "generators" : [
+          {
+            "filename" : "etc/coordinator.config.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["discovery_uri"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "coordinator",
+                "value" : "true"
+              },
+              {
+                "key" : "node-scheduler.include-coordinator",
+                "value" : "false"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/log.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["log_level"]
+          },
+          {
+            "filename" : "etc/catalog/hive.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["hive_metastore_uri", "hive_config_resources"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "hive-cdh5"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/mysql.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["mysql_connection_url", "mysql_connection_user", "mysql_connection_password"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "mysql"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/jmx.properties",
+            "configFormat" : "properties",
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "jmx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name" : "PRESTO_WORKER",
+      "label" : "Worker",
+      "pluralLabel" : "Workers",
+      "startRunner" : {
+        "program" : "scripts/control.sh",
+        "args" : [
+          "start_worker",
+          "etc/worker.config.properties"
+        ],
+        "environmentVariables" : {
+          "PRESTO_JVM_CONFIG" : "${jvm_config}"
+        }
+      },
+      "commands" : [
+        {
+          "name" : "worker_init",
+          "label" : "Initialize node.properties.",
+          "description" : "Initialize node.properties.",
+          "expectedExitCodes" : [0],
+          "requiredRoleState" : "stopped",
+          "commandRunner" : {
+            "program" : "scripts/control.sh",
+            "args" : ["init_node_properties"],
+            "environmentVariables" : {
+            }
+          }
+        }
+      ],
+      "externalLink" : {
+       "name" : "worker_web_ui",
+       "label" : "Worker Web UI",
+       "url" : "http://${host}:${worker_webui_port}"
+      },
+      "topology" : { "minInstances" : 1 },
+      "logging" : {
+         "dir" : "/var/log/presto",
+         "filename" : "presto-worker-${host}.log",
+         "configName" : "log.dir",
+         "modifiable" : true,
+         "loggingType" : "log4j"
+      },
+      "parameters" : [
+        {
+          "name" : "worker_webui_port",
+          "label" : "Worker Port",
+          "description" : "The port of the worker",
+          "configName" : "http-server.http.port",
+          "required" : "true",
+          "type" : "port",
+          "default" : 8080
+        },
+        {
+          "name" : "task_max_memory",
+          "label" : "task",
+          "description" : "task.max-memory",
+          "configName" : "task.max-memory",
+          "required" : "true",
+          "type" : "memory",
+          "unit" : "bytes",
+          "default" : 1073741824
+        },
+        {
+          "name" : "jvm_config",
+          "label" : "jvm_config",
+          "description" : "jvm_config",
+          "configName" : "jvm.config",
+          "required" : "true",
+          "type" : "string_array",
+          "separator" : "\n",
+          "default" : [
+            "-server",
+            "-Xmx16G",
+            "-XX:+UseConcMarkSweepGC",
+            "-XX:+ExplicitGCInvokesConcurrent",
+            "-XX:+AggressiveOpts",
+            "-XX:+HeapDumpOnOutOfMemoryError"
+          ]
+        }
+      ],
+      "configWriter" : {
+        "generators" : [
+          {
+            "filename" : "etc/worker.config.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["discovery_uri"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "coordinator",
+                "value" : "false"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/log.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["log_level"]
+          },
+          {
+            "filename" : "etc/catalog/hive.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["hive_metastore_uri", "hive_config_resources"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "hive-cdh5"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/mysql.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["mysql_connection_url", "mysql_connection_user", "mysql_connection_password"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "mysql"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/jmx.properties",
+            "configFormat" : "properties",
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "jmx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name" : "PRESTO_DISCOVERY",
+      "label" : "Discovery",
+      "pluralLabel" : "Discoverys",
+      "startRunner" : {
+        "program" : "scripts/control.sh",
+        "args" : [
+          "start_discovery",
+          "etc/discovery.config.properties"
+        ],
+        "environmentVariables" : {
+          "PRESTO_JVM_CONFIG" : "${jvm_config}"
+        }
+      },
+      "commands" : [
+        {
+          "name" : "discovery_init",
+          "label" : "Initialize node.properties.",
+          "description" : "Initialize node.properties.",
+          "expectedExitCodes" : [0],
+          "requiredRoleState" : "stopped",
+          "commandRunner" : {
+            "program" : "scripts/control.sh",
+            "args" : ["init_node_properties"],
+            "environmentVariables" : {
+            }
+          }
+        }
+      ],
+      "externalLink" : {
+       "name" : "discovery_web_ui",
+       "label" : "Discovery Web UI",
+       "url" : "http://${host}:${discovery_webui_port}"
+      },
+      "topology" : { "minInstances" : 1, "maxInstances" : 1 },
+      "logging" : {
+         "dir" : "/var/log/presto",
+         "filename" : "presto-discovery-${host}.log",
+         "configName" : "log.dir",
+         "modifiable" : true,
+         "loggingType" : "log4j"
+      },
+      "parameters" : [
+        {
+          "name" : "discovery_webui_port",
+          "label" : "Discovery Port",
+          "description" : "The port of the worker",
+          "configName" : "http-server.http.port",
+          "required" : "true",
+          "type" : "port",
+          "default" : 8080
+        },
+        {
+          "name" : "task_max_memory",
+          "label" : "task",
+          "description" : "task.max-memory",
+          "configName" : "task.max-memory",
+          "required" : "true",
+          "type" : "memory",
+          "unit" : "bytes",
+          "default" : 1073741824
+        },
+        {
+          "name" : "jvm_config",
+          "label" : "jvm_config",
+          "description" : "jvm_config",
+          "configName" : "jvm.config",
+          "required" : "true",
+          "type" : "string_array",
+          "separator" : "\n",
+          "default" : [
+            "-server",
+            "-Xmx16G",
+            "-XX:+UseConcMarkSweepGC",
+            "-XX:+ExplicitGCInvokesConcurrent",
+            "-XX:+AggressiveOpts",
+            "-XX:+HeapDumpOnOutOfMemoryError"
+          ]
+        }
+      ],
+      "configWriter" : {
+        "generators" : [
+          {
+            "filename" : "etc/discovery.config.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["discovery_uri"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "coordinator",
+                "value" : "false"
+              },
+              {
+                "key" : "discovery-server.enabled",
+                "value" : "true"
+              },
+              {
+                "key" : "node-scheduler.include-coordinator",
+                "value" : "false"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/log.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["log_level"]
+          },
+          {
+            "filename" : "etc/catalog/hive.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["hive_metastore_uri", "hive_config_resources"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "hive-cdh5"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/mysql.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["mysql_connection_url", "mysql_connection_user", "mysql_connection_password"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "mysql"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/jmx.properties",
+            "configFormat" : "properties",
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "jmx"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
