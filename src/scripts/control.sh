@@ -8,6 +8,7 @@ NODE_PROPERTIES_PATH=$DEFAULT_PRESTO_HOME/node.properties
 JVM_DUMMY_CONFIG_PATH=$CONF_DIR/jvm.dummy.config
 JVM_CONFIG_PATH=$CONF_DIR/etc/jvm.config
 export JAVA_HOME=$CDH_PRESTO_JAVA_HOME
+HIVE_CONF_PATH=$CONF_DIR/hive-conf
 
 CMD=$1
 
@@ -21,6 +22,11 @@ function generate_jvm_config {
   if [ -f $JVM_DUMMY_CONFIG_PATH ]; then
     cat $JVM_DUMMY_CONFIG_PATH | perl -e '$line = <STDIN>; chomp $line; $configs = substr($line, (length "jvm.config=")); for $value (split /\\n/, $configs) { print $value . "\n" }' > $JVM_CONFIG_PATH
   fi
+}
+
+function copy_hdfs_config {
+  cp $HIVE_CONF_PATH/core-site.xml $CONF_DIR/etc/catalog
+  cp $HIVE_CONF_PATH/hdfs-site.xml $CONF_DIR/etc/catalog
 }
 
 function link_files {
@@ -58,6 +64,7 @@ case $CMD in
     log "Startitng Presto Coordinator"
     link_files
     generate_jvm_config
+    copy_hdfs_config
     ARGS=("--config")
     ARGS+=("$CONF_DIR/$2")
     ARGS+=("--data-dir")
@@ -69,6 +76,7 @@ case $CMD in
     log "Startitng Presto Discovery"
     link_files
     generate_jvm_config
+    copy_hdfs_config
     ARGS=("--config")
     ARGS+=("$CONF_DIR/$2")
     ARGS+=("--data-dir")
@@ -80,6 +88,7 @@ case $CMD in
     log "Startitng Presto Worker"
     link_files
     generate_jvm_config
+    copy_hdfs_config
     ARGS=("--config")
     ARGS+=("$CONF_DIR/$2")
     ARGS+=("--data-dir")

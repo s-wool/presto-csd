@@ -77,16 +77,6 @@
       "default" : "thrift://localhost:9083"
     },
     {
-      "name" : "hive_config_resources",
-      "label" : "hive.config.resources",
-      "description" : "hive.config.resources",
-      "configName" : "hive.config.resources",
-      "required" : "true",
-      "type" : "path_array",
-      "pathType" : "serviceSpecific",
-      "default" : ["/etc/hadoop/conf/core-site.xml","/etc/hadoop/conf/hdfs-site.xml"]
-    },
-    {
       "name" : "mysql_connection_host",
       "label" : "mysql.connection-url",
       "description" : "mysql host",
@@ -240,12 +230,16 @@
           {
             "filename" : "etc/catalog/hive.properties",
             "configFormat" : "properties",
-            "includedParams" : ["hive_metastore_uri", "hive_config_resources"],
+            "includedParams" : ["hive_metastore_uri"],
             "excludedParams" : ["jvm_config"],
             "additionalConfigs" : [
               {
                 "key" : "connector.name",
                 "value" : "hive-cdh5"
+              },
+              {
+                "key" : "hive.config.resources",
+                "value" : "etc/catalog/core-site.xml,etc/catalog/hdfs-site.xml"
               }
             ]
           },
@@ -385,12 +379,16 @@
           {
             "filename" : "etc/catalog/hive.properties",
             "configFormat" : "properties",
-            "includedParams" : ["hive_metastore_uri", "hive_config_resources"],
+            "includedParams" : ["hive_metastore_uri"],
             "excludedParams" : ["jvm_config"],
             "additionalConfigs" : [
               {
                 "key" : "connector.name",
                 "value" : "hive-cdh5"
+              },
+              {
+                "key" : "hive.config.resources",
+                "value" : "etc/catalog/core-site.xml,etc/catalog/hdfs-site.xml"
               }
             ]
           },
@@ -538,12 +536,16 @@
           {
             "filename" : "etc/catalog/hive.properties",
             "configFormat" : "properties",
-            "includedParams" : ["hive_metastore_uri", "hive_config_resources"],
+            "includedParams" : ["hive_metastore_uri"],
             "excludedParams" : ["jvm_config"],
             "additionalConfigs" : [
               {
                 "key" : "connector.name",
                 "value" : "hive-cdh5"
+              },
+              {
+                "key" : "hive.config.resources",
+                "value" : "etc/catalog/core-site.xml,etc/catalog/hdfs-site.xml"
               }
             ]
           },
