@@ -145,7 +145,6 @@
           "etc/coordinator.config.properties"
         ],
         "environmentVariables" : {
-          "PRESTO_JVM_CONFIG" : "${jvm_config}"
         }
       },
       "commands" : [
@@ -210,7 +209,8 @@
             "-XX:+UseConcMarkSweepGC",
             "-XX:+ExplicitGCInvokesConcurrent",
             "-XX:+AggressiveOpts",
-            "-XX:+HeapDumpOnOutOfMemoryError"
+            "-XX:+HeapDumpOnOutOfMemoryError",
+            "-XX:OnOutOfMemoryError=kill -9 %p"
           ]
         }
       ],
@@ -274,6 +274,11 @@
                 "value" : "jmx"
               }
             ]
+          },
+          {
+            "filename" : "jvm.dummy.config",
+            "configFormat" : "properties",
+            "includedParams" : ["jvm_config"]
           }
         ]
       }
@@ -289,7 +294,6 @@
           "etc/worker.config.properties"
         ],
         "environmentVariables" : {
-          "PRESTO_JVM_CONFIG" : "${jvm_config}"
         }
       },
       "commands" : [
@@ -354,7 +358,8 @@
             "-XX:+UseConcMarkSweepGC",
             "-XX:+ExplicitGCInvokesConcurrent",
             "-XX:+AggressiveOpts",
-            "-XX:+HeapDumpOnOutOfMemoryError"
+            "-XX:+HeapDumpOnOutOfMemoryError",
+            "-XX:OnOutOfMemoryError=kill -9 %p"
           ]
         }
       ],
@@ -414,6 +419,11 @@
                 "value" : "jmx"
               }
             ]
+          },
+          {
+            "filename" : "jvm.dummy.config",
+            "configFormat" : "properties",
+            "includedParams" : ["jvm_config"]
           }
         ]
       }
@@ -429,7 +439,6 @@
           "etc/discovery.config.properties"
         ],
         "environmentVariables" : {
-          "PRESTO_JVM_CONFIG" : "${jvm_config}"
         }
       },
       "commands" : [
@@ -494,7 +503,8 @@
             "-XX:+UseConcMarkSweepGC",
             "-XX:+ExplicitGCInvokesConcurrent",
             "-XX:+AggressiveOpts",
-            "-XX:+HeapDumpOnOutOfMemoryError"
+            "-XX:+HeapDumpOnOutOfMemoryError",
+            "-XX:OnOutOfMemoryError=kill -9 %p"
           ]
         }
       ],
@@ -563,6 +573,11 @@
                 "value" : "jmx"
               }
             ]
+          },
+          {
+            "filename" : "jvm.dummy.config",
+            "configFormat" : "properties",
+            "includedParams" : ["jvm_config"]
           }
         ]
       }
