@@ -87,13 +87,22 @@
       "default" : ["/etc/hadoop/conf/core-site.xml","/etc/hadoop/conf/hdfs-site.xml"]
     },
     {
-      "name" : "mysql_connection_url",
+      "name" : "mysql_connection_host",
       "label" : "mysql.connection-url",
-      "description" : "mysql.connection-url",
-      "configName" : "connection-url",
+      "description" : "mysql host",
+      "configName" : "mysql.connection.host",
       "required" : "true",
-      "type" : "uri",
-      "default" : "jdbc:mysql://localhost:3306"
+      "type" : "string",
+      "default" : "localhost"
+    },
+    {
+      "name" : "mysql_connection_port",
+      "label" : "mysql.connection-port",
+      "description" : "mysql prot",
+      "configName" : "mysql.connection.port",
+      "required" : "true",
+      "type" : "port",
+      "default" : "3306"
     },
     {
       "name" : "mysql_connection_user",
@@ -243,12 +252,16 @@
           {
             "filename" : "etc/catalog/mysql.properties",
             "configFormat" : "properties",
-            "includedParams" : ["mysql_connection_url", "mysql_connection_user", "mysql_connection_password"],
-            "excludedParams" : ["jvm_config"],
+            "includedParams" : ["mysql_connection_user", "mysql_connection_password"],
+            "excludedParams" : ["jvm_config", "mysql_connection_host", "mysql_connection_port"],
             "additionalConfigs" : [
               {
                 "key" : "connector.name",
                 "value" : "mysql"
+              },
+              {
+                "key" : "connection-url",
+                "value" : "jdbc:mysql://${mysql_connection_host}:${mysql_connection_port}"
               }
             ]
           },
@@ -379,12 +392,16 @@
           {
             "filename" : "etc/catalog/mysql.properties",
             "configFormat" : "properties",
-            "includedParams" : ["mysql_connection_url", "mysql_connection_user", "mysql_connection_password"],
-            "excludedParams" : ["jvm_config"],
+            "includedParams" : ["mysql_connection_user", "mysql_connection_password"],
+            "excludedParams" : ["jvm_config", "mysql_connection_host", "mysql_connection_port"],
             "additionalConfigs" : [
               {
                 "key" : "connector.name",
                 "value" : "mysql"
+              },
+              {
+                "key" : "connection-url",
+                "value" : "jdbc:mysql://${mysql_connection_host}:${mysql_connection_port}"
               }
             ]
           },
@@ -523,12 +540,16 @@
           {
             "filename" : "etc/catalog/mysql.properties",
             "configFormat" : "properties",
-            "includedParams" : ["mysql_connection_url", "mysql_connection_user", "mysql_connection_password"],
-            "excludedParams" : ["jvm_config"],
+            "includedParams" : ["mysql_connection_user", "mysql_connection_password"],
+            "excludedParams" : ["jvm_config", "mysql_connection_host", "mysql_connection_port"],
             "additionalConfigs" : [
               {
                 "key" : "connector.name",
                 "value" : "mysql"
+              },
+              {
+                "key" : "connection-url",
+                "value" : "jdbc:mysql://${mysql_connection_host}:${mysql_connection_port}"
               }
             ]
           },
