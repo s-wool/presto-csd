@@ -30,28 +30,23 @@ function copy_hdfs_config {
 }
 
 function link_files {
-  # PRESTO_BIN=$CONF_DIR/bin
-  # if [ -L $PRESTO_BIN ]; then
-  #   rm -rf $PRESTO_BIN
-  # fi
-  # ln -s $CDH_PRESTO_HOME/bin $PRESTO_BIN
   cp -r $CDH_PRESTO_HOME/bin $CONF_DIR
 
   PRESTO_LIB=$CONF_DIR/lib
   if [ -L $PRESTO_LIB ]; then
-    rm -rf $PRESTO_LIB
+    rm -f $PRESTO_LIB
   fi
   ln -s $CDH_PRESTO_HOME/lib $PRESTO_LIB
 
   PRESTO_PLUGIN=$CONF_DIR/plugin
   if [ -L $PRESTO_PLUGIN ]; then
-    rm -rf $PRESTO_PLUGIN
+    rm -f $PRESTO_PLUGIN
   fi
   ln -s $CDH_PRESTO_HOME/plugin $PRESTO_PLUGIN
 
   PRESTO_NODE_PROPERTIES=$CONF_DIR/etc/node.properties
   if [ -L $PRESTO_NODE_PROPERTIES ]; then
-      rm $PRESTO_NODE_PROPERTIES
+      rm -f $PRESTO_NODE_PROPERTIES
   fi
   ln -s $NODE_PROPERTIES_PATH $PRESTO_NODE_PROPERTIES
 }
