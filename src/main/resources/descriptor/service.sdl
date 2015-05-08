@@ -24,7 +24,7 @@
       "label" : "Initialize node.properties",
       "description" : "Initialize node.properties file.",
       "roleName" : "PRESTO_COORDINATOR",
-      "roleCommand" : "init_node_properties",
+      "roleCommand" : "coord_init",
       "runMode" : "all"
     },
     {
@@ -32,7 +32,7 @@
       "label" : "Initialize node.properties",
       "description" : "Initialize node.properties file.",
       "roleName" : "PRESTO_DISCOVERY",
-      "roleCommand" : "init_node_properties",
+      "roleCommand" : "discovery_init",
       "runMode" : "all"
     },
     {
@@ -40,7 +40,7 @@
       "label" : "Initialize node.properties",
       "description" : "Initialize node.properties file.",
       "roleName" : "PRESTO_WORKER",
-      "roleCommand" : "init_node_properties",
+      "roleCommand" : "worker_init",
       "runMode" : "all"
     }
   ],
