@@ -128,6 +128,21 @@
         "environmentVariables" : {
         }
       },
+      "commands" : [
+        {
+          "name" : "coord_init",
+          "label" : "Initialize node.properties.",
+          "description" : "Initialize node.properties.",
+          "expectedExitCodes" : [0],
+          "requiredRoleState" : "stopped",
+          "commandRunner" : {
+            "program" : "scripts/control.sh",
+            "args" : ["init_node_properties"],
+            "environmentVariables" : {
+            }
+          }
+        }
+      ],
       "externalLink" : {
        "name" : "coordinator_web_ui",
        "label" : "Coordinator Web UI",
@@ -254,6 +269,21 @@
         "environmentVariables" : {
         }
       },
+      "commands" : [
+        {
+          "name" : "worker_init",
+          "label" : "Initialize node.properties.",
+          "description" : "Initialize node.properties.",
+          "expectedExitCodes" : [0],
+          "requiredRoleState" : "stopped",
+          "commandRunner" : {
+            "program" : "scripts/control.sh",
+            "args" : ["init_node_properties"],
+            "environmentVariables" : {
+            }
+          }
+        }
+      ],
       "externalLink" : {
        "name" : "worker_web_ui",
        "label" : "Worker Web UI",
@@ -376,6 +406,21 @@
         "environmentVariables" : {
         }
       },
+      "commands" : [
+        {
+          "name" : "discovery_init",
+          "label" : "Initialize node.properties.",
+          "description" : "Initialize node.properties.",
+          "expectedExitCodes" : [0],
+          "requiredRoleState" : "stopped",
+          "commandRunner" : {
+            "program" : "scripts/control.sh",
+            "args" : ["init_node_properties"],
+            "environmentVariables" : {
+            }
+          }
+        }
+      ],
       "externalLink" : {
        "name" : "discovery_web_ui",
        "label" : "Discovery Web UI",
