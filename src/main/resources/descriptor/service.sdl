@@ -2,7 +2,7 @@
   "name" : "PRESTO",
   "label" : "Presto",
   "description" : "Distributed SQL Query Engine for Big Data",
-  "version" : "0.98",
+  "version" : "${project.version}",
   "runAs" : {
     "user" : "presto",
     "group" : "presto"
@@ -158,13 +158,6 @@
        "url" : "http://${host}:${coordinator_webui_port}"
       },
       "topology" : { "minInstances" : 1 },
-      "logging" : {
-         "dir" : "/var/log/presto",
-         "filename" : "presto-coordinator-${host}.log",
-         "configName" : "log.dir",
-         "modifiable" : true,
-         "loggingType" : "log4j"
-      },
       "parameters" : [
         {
           "name" : "coordinator_webui_port",
@@ -311,13 +304,6 @@
        "url" : "http://${host}:${worker_webui_port}"
       },
       "topology" : { "minInstances" : 1 },
-      "logging" : {
-         "dir" : "/var/log/presto",
-         "filename" : "presto-worker-${host}.log",
-         "configName" : "log.dir",
-         "modifiable" : true,
-         "loggingType" : "log4j"
-      },
       "parameters" : [
         {
           "name" : "worker_webui_port",
@@ -460,13 +446,6 @@
        "url" : "http://${host}:${discovery_webui_port}"
       },
       "topology" : { "minInstances" : 1, "maxInstances" : 1 },
-      "logging" : {
-         "dir" : "/var/log/presto",
-         "filename" : "presto-discovery-${host}.log",
-         "configName" : "log.dir",
-         "modifiable" : true,
-         "loggingType" : "log4j"
-      },
       "parameters" : [
         {
           "name" : "discovery_webui_port",
