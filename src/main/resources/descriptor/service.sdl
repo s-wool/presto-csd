@@ -111,15 +111,6 @@
       "required" : "true",
       "type" : "password",
       "default" : "password"
-    },
-    {
-      "name" : "log_level",
-      "label" : "log_level",
-      "description" : "log level",
-      "configName" : "com.facebook.presto",
-      "required" : "true",
-      "type" : "string",
-      "default" : "INFO"
     }
   ],
   "rolesWithExternalLinks" : ["PRESTO_COORDINATOR", "PRESTO_DISCOVERY", "PRESTO_WORKER"],
@@ -214,11 +205,6 @@
                 "value" : "false"
               }
             ]
-          },
-          {
-            "filename" : "etc/log.properties",
-            "configFormat" : "properties",
-            "includedParams" : ["log_level"]
           },
           {
             "filename" : "etc/catalog/hive.properties",
@@ -356,11 +342,6 @@
                 "value" : "false"
               }
             ]
-          },
-          {
-            "filename" : "etc/log.properties",
-            "configFormat" : "properties",
-            "includedParams" : ["log_level"]
           },
           {
             "filename" : "etc/catalog/hive.properties",
@@ -506,11 +487,6 @@
                 "value" : "false"
               }
             ]
-          },
-          {
-            "filename" : "etc/log.properties",
-            "configFormat" : "properties",
-            "includedParams" : ["log_level"]
           },
           {
             "filename" : "etc/catalog/hive.properties",
