@@ -193,7 +193,7 @@
           {
             "filename" : "etc/coordinator.config.properties",
             "configFormat" : "properties",
-            "includedParams" : ["discovery_uri"],
+            "includedParams" : ["discovery_uri", "coordinator_webui_port"],
             "excludedParams" : ["jvm_config"],
             "additionalConfigs" : [
               {
@@ -334,7 +334,7 @@
           {
             "filename" : "etc/worker.config.properties",
             "configFormat" : "properties",
-            "includedParams" : ["discovery_uri"],
+            "includedParams" : ["discovery_uri", "worker_webui_port"],
             "excludedParams" : ["jvm_config"],
             "additionalConfigs" : [
               {
@@ -471,7 +471,7 @@
           {
             "filename" : "etc/discovery.config.properties",
             "configFormat" : "properties",
-            "includedParams" : ["discovery_uri"],
+            "includedParams" : ["discovery_uri", "discovery_webui_port"],
             "excludedParams" : ["jvm_config"],
             "additionalConfigs" : [
               {
