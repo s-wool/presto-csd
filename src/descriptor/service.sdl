@@ -159,8 +159,8 @@
       },
       "topology" : { "minInstances" : 1 },
       "logging" : {
-         "dir" : "/var/log/presto",
-         "filename" : "presto-coordinator-${host}.log",
+         "dir" : "/var/lib/presto/logs",
+         "filename" : "stderr.log",
          "configName" : "log.dir",
          "modifiable" : true,
          "loggingType" : "log4j"
@@ -312,8 +312,8 @@
       },
       "topology" : { "minInstances" : 1 },
       "logging" : {
-         "dir" : "/var/log/presto",
-         "filename" : "presto-worker-${host}.log",
+         "dir" : "/var/lib/presto/logs",
+         "filename" : "stderr.log",
          "configName" : "log.dir",
          "modifiable" : true,
          "loggingType" : "log4j"
@@ -461,8 +461,8 @@
       },
       "topology" : { "minInstances" : 1, "maxInstances" : 1 },
       "logging" : {
-         "dir" : "/var/log/presto",
-         "filename" : "presto-discovery-${host}.log",
+         "dir" : "/var/lib/presto/logs",
+         "filename" : "stderr.log",
          "configName" : "log.dir",
          "modifiable" : true,
          "loggingType" : "log4j"
