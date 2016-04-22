@@ -16,6 +16,10 @@
     {
       "name" : "HIVE",
       "required" : "false"
+    },
+    {
+      "name" : "KAFKA",
+      "required" : "false"
     }
   ],
   "commands" : [
@@ -111,6 +115,24 @@
       "required" : "true",
       "type" : "password",
       "default" : "password"
+    },
+    {
+      "name" : "kafka_nodes",
+      "label" : "kafka.nodes",
+      "description" : "kafka.nodes",
+      "configName" : "kafka.nodes",
+      "required" : "true",
+      "type" : "string",
+      "default" : "localhost:9092"
+    },
+    {
+      "name" : "kafka_table_names",
+      "label" : "kafka.table-names",
+      "description" : "kafka.table-names",
+      "configName" : "kafka.table-names",
+      "required" : "true",
+      "type" : "string",
+      "default" : ""
     }
   ],
   "rolesWithExternalLinks" : ["PRESTO_COORDINATOR", "PRESTO_DISCOVERY", "PRESTO_WORKER"],
@@ -219,6 +241,22 @@
               {
                 "key" : "hive.config.resources",
                 "value" : "etc/catalog/core-site.xml,etc/catalog/hdfs-site.xml"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/kafka.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["kafka_nodes", "kafka_table_names"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "kafka"
+              },
+              {
+                "key" : "kafka.hide-internal-columns",
+                "value" : "false"
               }
             ]
           },
@@ -356,6 +394,22 @@
               {
                 "key" : "hive.config.resources",
                 "value" : "etc/catalog/core-site.xml,etc/catalog/hdfs-site.xml"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/kafka.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["kafka_nodes", "kafka_table_names"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "kafka"
+              },
+              {
+                "key" : "kafka.hide-internal-columns",
+                "value" : "false"
               }
             ]
           },
@@ -501,6 +555,22 @@
               {
                 "key" : "hive.config.resources",
                 "value" : "etc/catalog/core-site.xml,etc/catalog/hdfs-site.xml"
+              }
+            ]
+          },
+          {
+            "filename" : "etc/catalog/kafka.properties",
+            "configFormat" : "properties",
+            "includedParams" : ["kafka_nodes", "kafka_table_names"],
+            "excludedParams" : ["jvm_config"],
+            "additionalConfigs" : [
+              {
+                "key" : "connector.name",
+                "value" : "kafka"
+              },
+              {
+                "key" : "kafka.hide-internal-columns",
+                "value" : "false"
               }
             ]
           },
